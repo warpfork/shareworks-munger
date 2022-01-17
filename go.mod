@@ -1,4 +1,4 @@
-module github.com/warpfork/munge-shareworks
+module github.com/warpfork/shareworks-munger
 
 go 1.17
 

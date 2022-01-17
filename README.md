@@ -1,5 +1,5 @@
-A program to Munge Shareworks reports into Something Usable
-===========================================================
+Shareworks-munger: A program to process Shareworks reports into Something Usable
+================================================================================
 
 "Shareworks" is a product of Morgan Stanley which tracks certain kinds of financial information
 (specifically, stock and compentation-related information) and distributes reports about it to the receiptients.
