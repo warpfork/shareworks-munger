@@ -28,7 +28,7 @@ func main() {
 		// Emit csv.
 		emitCsv(os.Stdout, columns, entries)
 		// Done!
-		fmt.Fprintf(os.Stderr, "%q: munged: a new csv file awaits\n", arg)
+		fmt.Fprintf(os.Stderr, "%q: munged successfully: copy the above to a file (or use shell redirection) to save it.\n", arg)
 	}
 	if someErrors {
 		os.Exit(14)
