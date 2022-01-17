@@ -58,30 +58,24 @@ If you'd like to make this more automated and easier to use, "PRs welcome", as w
 
 #### Getting the raw data
 
-1. Log in to Shareworks and get the html file.
-	- Log in to Shareworks.
+1. Log in to Shareworks.
+2. Get the report onto your screen.
 	- Click "Activity" at the top.
 	- Click "Reports".
 	- Do the date selection to whatever you want.
 	- Leave the other options as "Web Page" and "Full".
 	- Submit.
-	- *Save the page*.
-		- ~`Ctrl-S` usually does this; your browser may vary.~
-		- ~We only need the html file.  (So if the save dialog window says "web page complete" or something, and you can change that to "html only", go for it.)~
-		- ~You can name it whatever you want.~
-		- HANG ON.  IT GETS MORE DERANGED
-	- You can't actually save the page.  Somehow this just gives you some html relating to login and a bunch of javascript.  Okay.  Buckle up.  We're going to have to grab the html out of the object inspector.  We're in web debug town now!
-2. Get the actual html content.
-	- (I'm splitting this into a separate step because this is getting more involved than it should be.)
-	- Right-click anywhere on the page, and open "inspect".
-	- Some crazy debugger thing just opened.  If you don't know what this is, don't worry, just hang on.
-	- Scroll up to the top of that thing.  You should see a bit that says `<html` somewhere.  Right click on that.
-	- Hover "Copy" in the right-click menu, then click "Inner HTML" -- or "Copy element" in Chrome.  (Whatever.)  You should now have a big hunk of juicy data on your clipboard.
+3. Now it gets fun.  We need the HTML from this, but we can't just save the page.
+	- (Why can't we just save the page?  Because this website... it's incredible, in a bad way.  I don't wanna talk about it.  This is not how this website should've been written.)
+	- Right-click somewhere in the report data, and then click "inspect".
+		- Some crazy debugger thing just opened.  If you don't know what this is, don't worry, just hang on.
+	- Scroll up until you see something that says `<iframe id="transaction-statement-iframe` (... and then some more stuff you can ignore; it just has to start like this).
+	- Scroll *slightly* back down: You should see a bit that says `<html` right underneath the `<iframe`.  Right click on that.
+	- Hover "Copy" in the right-click menu, then click "Inner HTML" -- or "Copy element" in Chrome.  (Whatever.)  You should now have a big hunk of juicy data on your clipboard!  We're almost there!
 	- Dizzy?  See the screenshot below.
-	- FIXME: FIXME: FIXME: just kidding, this doesn't actually work either -- there's an iframe in the way.  You have to find that, as a human, and get the content of _that_.  Why must this be so complicated??  Who wrote this website like this and why???
-3. Paste that stuff into a file.  Call it `wow.html` or whatever you want.
+4. Paste that data from your clipboard into a file and save it.  Call it `wow.html` or whatever you want.
 	- If you're not very tech savvy -- mind that this needs to be a "plain text" file.  Not a word document or whatever.  If that's not familar to you, I'm sorry; this is beyond my depth to explain in this readme.
-4. HOORAY -- you are done with the browser now.  You can close it.
+5. HOORAY -- you are done with the browser now.  You can close it.
 
 Here's a screenshot of what getting the raw HTML looks like:
 
@@ -95,7 +89,7 @@ Okay.  Phew.  Now on to actually running the munger.
 	- If you're not the kind of tech savvy for this -- I'm sorry; this is beyond my depth to explain in this readme.
 2. You should have Golang installed.  Sanitycheck: you can run `go env` in the terminal, and it works, right?
 	- If you're not the kind of tech savvy for this -- I'm sorry; this is beyond my depth to explain in this readme.
-3. `go run ./main.go ./wow.html` -- or use whatever your filename was from step 3 above, when you got the data.
+3. `go run ./main.go ./wow.html` -- or use whatever your filename was from step 4 above, when you got the data.
 4. That's it!  The CSV data should've appeared on your terminal!
 5. Redirect it to a file to save it: `go run ./main.go ./wow.html > sane.csv`
 
