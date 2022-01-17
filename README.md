@@ -15,6 +15,8 @@ That's it.
 
 You can then open the CSV in Excel, or LibreOffice, or whatever you please.
 
+![Side by side, messy data and clean data](what-it-does.png)
+
 
 What the Fuck?
 --------------
@@ -24,6 +26,8 @@ We're talking about the data exports from a piece of software that's A) by a maj
 and I'm telling you that their exports are too batshit for an accountant to actually use?
 
 Yes.  Yes I am.
+
+I'm not kidding about turning dozens of pages into a few rows in the CSV form, either.  It's really obscene.
 
 I cannot begin to speculate on what kind of failure of organization inside Morgan Stanley caused them to utterly fail to be able to do something like "emit a CSV report", but fail they did.
 
