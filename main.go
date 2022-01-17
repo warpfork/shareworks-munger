@@ -119,8 +119,26 @@ func munge(filename string) (columns []string, entries []map[string]string, err 
 			accumulate(&columns, row, col3[i], col4[i])
 		}
 
-		// For shits and giggles, they made another KV attachment section.
-		// TODO
+		// For shits and giggles, they also made another KV attachment section, in a slightly different format.
+		//  This one is at least only KV.  And fortunately we can distinguish it by the classes of the table cells.
+		// TODO I haven't parsed this yet.
+		/*
+			// Code below is Not quite it.  The data is actually in another table that's a sibling *down* from the curren table.
+			// This is such an obscenely terrible way to parse this that *I give up*.  I'm done here.
+			// Fortunately, in my report, all the data found in this area is auxillary and can be regenerated from the data found in the earlier mechanism.
+			sel.Find("tr").Each(func(i int, sel *goquery.Selection) {
+				var key string
+				ugh, _ := sel.Html()
+				sel.Find("td.newReportCellStyle").Each(func(i int, sel *goquery.Selection) {
+					switch i {
+					case 0:
+						key = strings.TrimSpace(sel.Text())
+					case 1:
+						accumulate(&columns, row, key, strings.TrimSpace(sel.Text()))
+					}
+				})
+			})
+		*/
 	})
 
 	return columns, entries, nil
