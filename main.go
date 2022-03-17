@@ -74,19 +74,61 @@ func munge(filename string) (columns []string, entries []map[string]string, err 
 		return nil, nil, fmt.Errorf("none of the shareworks data tables had titles containing the word 'Release' -- are you sure this is the right html?  We expected the events to all have 'Release' in the title somewhere.")
 	}
 
+	// BUT WAIT!  THERE'S MORE!
+	// Look for h2 tags.  These contain the info about which kind of good we're handling.
+	//  This is super important if you have more than one kind of stock or token being reported.
+	//  Note that this information is NOT the actual stock or good itself -- it's the distribution schedule name.
+	//   You'll have to demux that information back onto the actual stock or good manually with information in your hands as a human -- the document **literally** does not contain this information, as far as I can tell.
+	// We have to do this in *the same query* as getting the tables, so that they're interleaved in the correct order in our selection here --
+	//  the h2 tags aren't parents of the data they describe, they're just *before* the data they describe.  Additional "whee" for parsing :))))
+	//   Can you imagine how great it would be if these tables actually say which unit they're denominated in?  But they don't :D :D :D :D
+	//  So, that tablesSelection var earlier is demoted to just being another sanitychecker, and we'll loop over this below, looking for both tables and h2 tags.
+	//   And we'll be re-doing the filter for tables-that-are-actually-relevant below, too.  Agghsdfhwefhsdfh.
+	tablesAndHeadersSelection := doc.Find("h2, table.sw-datatable")
+
 	// Okay, it's almost time to start accumulating data.
 	// I'm gonna kinda try to normalize this to columnar as we go;
 	//  and I'm not hard-coding any column headings,
 	//   so, first encounter with a data entry in the whole document determins the order in which it will appear as a column.
 	// See the definition of `columns` and `entries` at the top, in the function's returns.
 
-	// Go over each of the tables that made it past the filter criteria earlier.
-	// Each of these will become one row in our sanitized data.
+	// We also need one slot of memory to remember the text of the last h2 tag we saw,
+	//  because that's the distribution schedule name, and will apply to several rows, which we're about to loop over.
+	var distributionScheduleName string
+
+	// Go over the whole melange.
+	// The headers become one column; the tables that are relevant each become one row in our sanitized data.
 	// Yeah, one table becomes one row.  Yeah.  Yeahhhhh.
 	// This is why your accountant didn't want to work with this format.  Because it's insane.  This is not how data should be formatted.
-	tablesSelection.Each(func(i int, sel *goquery.Selection) {
+	// Anyway, let's go:
+	tablesAndHeadersSelection.Each(func(i int, sel *goquery.Selection) {
+		// First: see if this is:
+		//  - a heading (e.g. might indicate which distribution schedule the following tables are for),
+		//  - or if it's a table that we care about (e.g. it describes a distribution event),
+		//  - or if it's one of the other tables that's useless (see earlier comments).
+		// If it's a heading, we'll handle that in this logic block;
+		// if it's a useless table, we'll skip out;
+		// if it's a relevant table, the majority of the logic will continue below.
+		switch {
+		case sel.Is("h2"):
+			distributionScheduleName = strings.TrimPrefix(strings.TrimSpace(sel.Text()), "Summary of ")
+			return
+		case sel.Is("table.sw-datatable"):
+			headerText := sel.Find("th.newReportTitleStyle").First().Text()
+			if !strings.Contains(headerText, "Release") {
+				return
+			}
+			// if it does contain that word, it's relevant: continue...
+		default:
+			panic("unreachable, earlier filter should not have matched this")
+		}
+
+		// Make some temporary memory to put this row's data in as we find it.
 		row := map[string]string{}
 		entries = append(entries, row)
+
+		// Append the distributionScheduleName as a column.
+		accumulate(&columns, row, "Distribution Schedule", distributionScheduleName)
 
 		// Pick a title for the event.
 		//  We'll use that same table header that we happened to already look at above to filter the tables in the first place.

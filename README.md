@@ -117,17 +117,19 @@ Final responsibility is yours.
 
 ### Distinct share kinds are not marked in the CSV!
 
-If you have more than one kind of share/security/token/whatever in the Shareworks report --
+UPDATE: the parser has been improved.  But some caveats about the actual informational content remain.
+
+~If you have more than one kind of share/security/token/whatever in the Shareworks report --
 this is the stuff you'll find in headings outside of any of the tables in the document --
 **this munger does not currently parse this**, and such info will be missing from the CSV.
-At this time, you have to re-add this manually.
+At this time, you have to re-add this manually.~
 
-Partly this is because it's a pain to parse.
-Partly it's because the relevant information just flat out isn't in the document.
+~Partly this is because it's a pain to parse.
+Partly it's because~ the relevant information just flat out isn't in the document.
 (I know, I know.  This is insane.  I agree.)
 
-PRs welcome to fix the first part.
-There's nothing we can do about the second part except share this warning.
+~PRs welcome to fix the first part.~
+There's nothing we can do about the information being not present, except share this warning.
 
 Now, as to _why_ the relevant information -- the distinct share kinds -- aren't in the document:
 
@@ -146,5 +148,3 @@ because when you calculate something like capital loss and capital gains for tax
 
 But you're at the mercy of your accounting department to tell you what the mapping is
 from {the distribution schedule name} to {whatever the actual stock is}.
-
-Yeah.  Sorry.  (I hope the rest of the converter was still worth it, at least.)
