@@ -100,3 +100,51 @@ Okay.  Phew.  Now on to actually running the munger.
 You should now be able to open `sane.csv` with Excel, or LibreOffice, or whatever you want!
 And you can go ahead and send it to your accountant; they won't hate you anymore.
 (Probably.  At least not for this issue.)
+
+
+Caveats
+-------
+
+### Always double-check things
+
+This code is provided 'without warranty', etc.  I hope it works.  It certainly appears to.  But double-check with your own eyes.
+I'm not responsible for the correctness of your tax filings.
+Shareworks could change the format and break this tool and I might not notice; etc.
+Final responsibility is yours.
+
+(Also, honestly, just double check against the PDF or whatnot to make sure you didn't accidentally miss copying some of the HTML!  It's too easy.)
+
+
+### Distinct share kinds are not marked in the CSV!
+
+If you have more than one kind of share/security/token/whatever in the Shareworks report --
+this is the stuff you'll find in headings outside of any of the tables in the document --
+**this munger does not currently parse this**, and such info will be missing from the CSV.
+At this time, you have to re-add this manually.
+
+Partly this is because it's a pain to parse.
+Partly it's because the relevant information just flat out isn't in the document.
+(I know, I know.  This is insane.  I agree.)
+
+PRs welcome to fix the first part.
+There's nothing we can do about the second part except share this warning.
+
+Now, as to _why_ the relevant information -- the distinct share kinds -- aren't in the document:
+
+**The headings aren't the share kinds**.  They're the names of the process that's distributing them.
+
+_What?_
+
+Yeah, so, for example, you might be receiving two kinds of shares, let's call them XYZ and XWZ,
+but have three processes distributing them to you: some P1 and P2 and P3,
+and P1 and P2 both grant you XYZ shares (but on different schedules),
+and P3 grants you XWZ shares.
+
+You almost certainly need to keep the XYZ shares and the XWZ shares separate in your bookkeeping,
+because when you calculate something like capital loss and capital gains for tax purposes,
+**you cannot mix them** (they're different things with different values!).
+
+But you're at the mercy of your accounting department to tell you what the mapping is
+from {the distribution schedule name} to {whatever the actual stock is}.
+
+Yeah.  Sorry.  (I hope the rest of the converter was still worth it, at least.)
